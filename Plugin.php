@@ -21,9 +21,14 @@ class Plugin extends \System\Classes\PluginBase
 
     public function boot()
     {
-        Event::listen('cms.page.beforeRenderPage', function($controller, $page) {
-            $twig = $controller->getTwig();
-            $twig->addExtension(new Extension(true));
-        });
+        // Event::listen('cms.page.beforeRenderPage', function($controller, $page) {
+        //     $twig = $controller->getTwig();
+        //     $twig->addExtension(new Extension(true));
+        // });
+
+        Event::listen('cms.page.display', function($controller, $path, $page, $content) {
+            $htmlcompress = new Extension(true);
+            return $htmlcompress->compress($controller->getTwig(), $content);
+        }, 10);
     }
 }
